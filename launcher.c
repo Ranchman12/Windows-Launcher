@@ -68,63 +68,59 @@
            //creation flags in createprocess have to be changed CREATE_SHARED_WOW_VDM creates the process in the same window
            //inheritied handle is true
            
-                   if(input == 3){
-                         printf("\n");
-                                  if(!CreateProcess(NULL,
-                                                    lpCommandLine,
-                                                    NULL,         
-                                                    NULL,         
-                                                    TRUE,         
-                                                    NORMAL_PRIORITY_CLASS | CREATE_SHARED_WOW_VDM,           
-                                                    NULL,         
-                                                    NULL,         
-                                                    &startInfo, 
-                                                    &processInfo)){printError("CreateProcess");}
-                                                    //display pid using dwprocessid          
-                                                    printf("Started program %d with PID = %d\n\n", input, (int)processInfo.dwProcessId);
-                                                    //this condition will be true, we can grab the exit code using a DWORD object
-                                                    if(WaitForSingleObject(processInfo.hProcess, INFINITE) == WAIT_OBJECT_0){
-                                                      DWORD exitValue;
-                                                      GetExitCodeProcess(processInfo.hProcess, &exitValue);
-                                                      printf(" Program %d exited with return value %d\n", input, (int)exitValue);
-                                                     }
-                                                   
-                                                   CloseHandle(processInfo.hThread);
-                                                   CloseHandle(processInfo.hProcess);   
-                                 }      
-                               
+             if(input == 3){
+              printf("\n");
+                  if(!CreateProcess(NULL,
+                                    lpCommandLine,
+                                    NULL,         
+                                    NULL,         
+                                    TRUE,         
+                                    NORMAL_PRIORITY_CLASS | CREATE_SHARED_WOW_VDM,           
+                                    NULL,         
+                                    NULL,         
+                                    &startInfo, 
+                                    &processInfo)){printError("CreateProcess");}
+                               //display pid using dwprocessid          
+                  printf("Started program %d with PID = %d\n\n", input, (int)processInfo.dwProcessId);
+                               //this condition will be true, we can grab the exit code using a DWORD object
+                  if(WaitForSingleObject(processInfo.hProcess, INFINITE) == WAIT_OBJECT_0){
+                  DWORD exitValue;
+                  GetExitCodeProcess(processInfo.hProcess, &exitValue);
+                  printf(" Program %d exited with return value %d\n", input, (int)exitValue);
+                  }                                            
+               CloseHandle(processInfo.hThread);
+               CloseHandle(processInfo.hProcess);                           
+            }                  
                    //for all other choices, keep flags CREATE_NEW_CONSOLE
-                   if(input != 3){
-                                    if(!CreateProcess(NULL,
-                                                        lpCommandLine,
-                                                        NULL,
-                                                        NULL,
-                                                        FALSE,
-                                                        NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE,
-                                                        NULL,
-                                                        NULL,
-                                                        &startInfo,
-                                                        &processInfo)) {printError("CreateProcess");}   
+             if(input != 3){
+                  if(!CreateProcess(NULL,
+                                    lpCommandLine,
+                                    NULL,
+                                    NULL,
+                                    FALSE,
+                                    NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE,
+                                    NULL,
+                                    NULL,
+                                    &startInfo,
+                                    &processInfo)) {printError("CreateProcess");}   
                                                         
                         printf("Started program %d with PID = %d\n\n", input, (int)processInfo.dwProcessId);
                         printf("\n");
                         //if user chooses cmd, we have to wait for exit value just like nslookup
                         //this condition must be placed here becuase we create a new console like other choices
-                           if(input == 2){
-                                              printf("  waiting for program %d to terminate.\n", input);
-                                              if(WaitForSingleObject(processInfo.hProcess, INFINITE) == WAIT_OBJECT_0){
-                                                 DWORD exitValue;
-                                                 GetExitCodeProcess(processInfo.hProcess, &exitValue);
-                                                 printf(" Program %d exited with return value %d\n", input, (int)exitValue);
-                                              }
-                                           CloseHandle(processInfo.hThread);
-                                           CloseHandle(processInfo.hProcess);
-                                          }
-                                }
-                        }
-            }
+                   if(input == 2){
+                         printf("  waiting for program %d to terminate.\n", input);
+                           if(WaitForSingleObject(processInfo.hProcess, INFINITE) == WAIT_OBJECT_0){
+                           DWORD exitValue;
+                           GetExitCodeProcess(processInfo.hProcess, &exitValue);
+                           printf(" Program %d exited with return value %d\n", input, (int)exitValue);}
+                           CloseHandle(processInfo.hThread);
+                           CloseHandle(processInfo.hProcess);
+                                 }
+                         }
+             }
             
-    
+    }
     
     /****************************************************************
        The following function can be used to print out "meaningful"
